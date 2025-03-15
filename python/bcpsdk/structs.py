@@ -1,7 +1,7 @@
 import ctypes
 
 MAX_MSG_LEN = 0xFF
-MessageBuffer = ctypes.c_ubyte * MAX_MSG_LEN
+MessageBuffer = ctypes.c_uint8 * MAX_MSG_LEN
 
 # Define structures
 class CommandConnection(ctypes.Structure):
@@ -46,5 +46,6 @@ __all__ = [
     "CommandHardware",
     "CommandDisconnect",
     "CommandConnection",
-    "MessageBuffer"
+    "MessageBuffer",
+    "MAX_MSG_LEN",
 ]

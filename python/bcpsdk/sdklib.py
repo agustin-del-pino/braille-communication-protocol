@@ -14,13 +14,3 @@ lib.encodeQuerySoftware.argtypes = [ctypes.POINTER(QuerySoftware), ctypes.POINTE
 lib.encodeQuerySoftware.restype = ctypes.c_int
 lib.encode.argtypes = [ctypes.POINTER(BCPMessage), ctypes.POINTER(MessageBuffer)]
 lib.encode.restype = ctypes.c_int
-
-# if __name__ == '__main__':
-#     msg = BCPMessage()
-#     msg.type = 0;
-#     msg.data = MessageData()
-#     msg.data.CommandConnection = CommandConnection();
-#     msg.data.CommandConnection.id = 1;
-#     msg.data.CommandConnection.version = b'\x01\x00\x00'
-#     l, buf = encode(msg)
-#     print(l, buf[:l+1])
