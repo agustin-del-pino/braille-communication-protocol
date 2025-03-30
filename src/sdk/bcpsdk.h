@@ -140,10 +140,47 @@ int encodeCommandDisconnect(const CommandDisconnect *cmd, MessageBuffer out);
 
 typedef struct CommandHardware
 {
+    uint8_t id;
     uint8_t cells;
 } CommandHardware;
 
 int encodeCommandHardware(const CommandHardware *cmd, MessageBuffer out);
+
+typedef struct CommandSoftware {
+    uint8_t id;
+    char actions[120]; 
+} CommandSoftware;
+
+typedef struct CommandWrite {
+    uint8_t id;
+    char data[252]
+} CommandWrite;
+
+typedef struct CommandClear {
+    uint8_t id;
+} CommandClear;
+
+typedef struct CommandUserAction {
+    uint8_t id;
+    char actions[15];
+} CommandUserAction;
+
+typedef struct ResponseError {
+    uint8_t origin;
+    uint8_t id;
+    uint8_t code;
+} ResponseError;
+
+typedef struct ResponseACK {
+    uint8_t origin;
+    uint8_t id;
+} ResponseACK;
+
+typedef struct ResponseConnection {
+    uint8_t id;
+    char version[3];
+} ResponseACK;
+
 
 typedef struct QuerySoftware
 {

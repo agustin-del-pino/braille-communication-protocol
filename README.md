@@ -14,7 +14,7 @@ Braille Communication Protocol for Monica
 
 # Message Structure
 
-The message follow the next structure and also all bytes are unsigned.
+The message follows the next structure and also all bytes are unsigned.
 
 ````
 Len (1 byte)  | Class (1 byte) | Data (253 byte)
@@ -34,7 +34,7 @@ the first one and the odd numbers were took for the later.
 
 ## Connection Command
 
-This command is used for establish a connection. The handshake must be end with a Connection Response.
+This command is used for establish a connection. The response is Connection Response.
 
 | Class  | Id (1 byte)     | Version (3 bytes: Major-Minor-Patch)   |
 | ------ | --------------- | -------------------------------------- |
@@ -211,16 +211,16 @@ This response is used for establish a connection.
 
 | Class | Id (1 byte)     | Version (3 bytes: Major-Minor-Patch) |
 | ----- | --------------- | ------------------------------------ |
-| `0x0` | A connection id | The version of SDK used for Monica   |
+| `0x05` | A connection id | The version of SDK used for Monica   |
 
 **Example**
 ```
-0x00 0x01 0x01 0x00 0x00
+0x05 0x01 0x01 0x00 0x00
 ```
 This message translate into
 
 ```
-Class: Connection Command
+Class: Connection Response
 Connection ID: 1
 Version: v1.0.0
 ```
@@ -237,4 +237,74 @@ mch->mon: Hardware Configuration Command
 mch<-mon: ACK Response
 mch->mon: Software Configuration Command
 mch<-mon: ACK Response
+```
+
+# Braille Encoding
+
+In braille, the characters are represented as a 3x2 matrix, its elements can be a dot or nothing. 
+Due the similarity, the braille can be represented as a byte which the 0-5 bits are used for 
+indicate a dot (1) or nothing (0).
+
+This is the Braille Byte Structure
+```
+Casing (6-7) |  Matrix (0-5)
+00           |  00 00 00
+```
+
+Since the matrix only takes 6 elements, the remainder two are used for casing: 
+- 00 as lower
+- 01 as upper
+- 10 as number
+- 11 as reserved
+
+The braille matrix has the labels A-B for columns and 1-2-3 for rows.
+
+```
+   A  B
+1  .  .
+2  .  .
+3  .  . 
+```
+
+So, the *addresses* are:
+- 1A, 1B
+- 2A, 2B
+- 3A, 3B
+
+Due that the Braille Byte can be understood as:
+
+```
+bits   | 76   5   4     3   2     1   0
+Labels | CS [(3B, 3A); (2B, 2A); (1B, 1A)]
+```
+> *CS* stands for *"Casing"*.
+
+**Example**
+
+The letter *"a"* has this matrix:
+```
+   A  B
+1  o  .
+2  .  .
+3  .  . 
+```
+
+In Braille Byte will be:
+```
+00 00 00 01
+
+Casing: Lower
+1A-2B:  Dot,     Nothing
+2A-2B:  Nothing, Nothing
+3A-3B:  Nothing, Nothing
+```
+
+The upper "A" will be the same but 01 as casing:
+```
+01 00 00 01
+
+Casing: Upper
+1A-2B:  Dot,     Nothing
+2A-2B:  Nothing, Nothing
+3A-3B:  Nothing, Nothing
 ```
